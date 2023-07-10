@@ -628,7 +628,7 @@ async function init() {
   kos5Image = await createImageAsync(kos5Sprite);
 
   flagPole = new GenericObject({
-    x: 10968 + 600,
+    x: 14968 + 600,
     // x: 500,
     y: canvas.height - lgPlatformImage.height - flagPoleImage.height,
     image: flagPoleImage,
@@ -894,6 +894,34 @@ async function init() {
         traveled: 0,
       },
     }),
+    new Hedgehog({
+      position: {
+        x: 1500,
+        y: 100,
+      },
+      velocity: {
+        x: -0.3,
+        y: 0,
+      },
+      distance: {
+        limit: 100,
+        traveled: 0,
+      },
+    }),
+    new Hedgehog({
+      position: {
+        x: 2500,
+        y: 100,
+      },
+      velocity: {
+        x: -0.3,
+        y: 0,
+      },
+      distance: {
+        limit: 100,
+        traveled: 0,
+      },
+    }),
   ];
   particles = [];
   platforms = [
@@ -913,13 +941,31 @@ async function init() {
       x: 1991 + lgPlatformImage.width - tPlatformImage.width,
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height,
       image: tPlatformImage,
-      block: false,
+      block: true,
     }),
     new Platform({
       x: 1991 + 3 * lgPlatformImage.width - tPlatformImage.width,
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height,
       image: tPlatformImage,
-      block: false,
+      block: true,
+    }),
+
+    // new Platform({
+    //   x: 3991 + lgPlatformImage.width - tPlatformImage.width - 100,
+    //   y:
+    //     canvas.height -
+    //     lgPlatformImage.height -
+    //     tPlatformImage.height +
+    //     blockImage.height,
+    //   image: blockImage,
+    //   block: true,
+    // }),
+    new Platform({
+      x: 8712 + xtPlatformImage.width + 175,
+      y: canvas.height - xtPlatformImage.height,
+      image: blockImage,
+      block: true,
+      text: 5712 + xtPlatformImage.width + 175,
     }),
     new Platform({
       x: 5400 + 3 * lgPlatformImage.width - tPlatformImage.width,
@@ -932,24 +978,6 @@ async function init() {
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height - 100,
       image: platformSmallImage,
       block: true,
-    }),
-
-    new Platform({
-      x: 3991 + lgPlatformImage.width - tPlatformImage.width - 100,
-      y:
-        canvas.height -
-        lgPlatformImage.height -
-        tPlatformImage.height +
-        blockImage.height,
-      image: blockImage,
-      block: true,
-    }),
-    new Platform({
-      x: 8712 + xtPlatformImage.width + 175,
-      y: canvas.height - xtPlatformImage.height,
-      image: blockImage,
-      block: true,
-      text: 5712 + xtPlatformImage.width + 175,
     }),
 
     new Platform({
@@ -999,11 +1027,30 @@ async function init() {
       text: 6968 + 300,
     }),
     new Platform({
-      x: 9968 + 300 + 2 * lgPlatformImage.height - 2,
+      x: 10068 + 300 + 2 * lgPlatformImage.height - 2,
+      y: canvas.height - tPlatformImage.height,
+      image: tPlatformImage,
+      block: true,
+      text: 6968 + 300,
+    }),
+    new Platform({
+      x: 10168 + 500 + 2 * lgPlatformImage.height - 2,
+      y: canvas.height - tPlatformImage.height - 100,
+      image: tPlatformImage,
+      block: true,
+      text: 6968 + 300,
+    }),
+    new Platform({
+      x: 9968 + 300 + 2 * lgPlatformImage.width - 2,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
-      text: 6968 + 300,
+    }),
+    new Platform({
+      x: 9968 + 300 + 2 * lgPlatformImage.width - 2,
+      y: canvas.height - lgPlatformImage.height,
+      image: lgPlatformImage,
+      block: true,
     }),
   ];
   genericObjects = [
