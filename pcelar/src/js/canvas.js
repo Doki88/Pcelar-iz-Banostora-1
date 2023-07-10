@@ -26,9 +26,15 @@ import srkamenicaSprite from "../img/sremskakamenica.png";
 import tree1Sprite from "../img/tree1.png";
 import tree2Sprite from "../img/tree2.png";
 import tree3Sprite from "../img/tree3.png";
+import tree4Sprite from "../img/tree4.png";
 import tree5Sprite from "../img/tree5.png";
+import tree6Sprite from "../img/tree6.png";
+import tree7Sprite from "../img/tree7.png";
+import tree8Sprite from "../img/tree8.png";
 
 import kos2Sprite from "../img/kos2.png";
+import kos4Sprite from "../img/kos4.png";
+
 import kos5Sprite from "../img/kos5.png";
 
 import spriteRunLeft from "../img/spriteRunLeft.png";
@@ -575,8 +581,14 @@ let srkamenicaImage;
 let tree1Image;
 let tree2Image;
 let tree3Image;
+let tree4Image;
 let tree5Image;
+let tree6Image;
+let tree7Image;
+let tree8Image;
 let kos2Image;
+let kos4Image;
+
 let kos5Image;
 
 let game;
@@ -623,8 +635,14 @@ async function init() {
   tree1Image = await createImageAsync(tree1Sprite);
   tree2Image = await createImageAsync(tree2Sprite);
   tree3Image = await createImageAsync(tree3Sprite);
+  tree4Image = await createImageAsync(tree4Sprite);
   tree5Image = await createImageAsync(tree5Sprite);
+  tree6Image = await createImageAsync(tree6Sprite);
+  tree7Image = await createImageAsync(tree7Sprite);
+  tree8Image = await createImageAsync(tree8Sprite);
+
   kos2Image = await createImageAsync(kos2Sprite);
+  kos4Image = await createImageAsync(kos4Sprite);
   kos5Image = await createImageAsync(kos5Sprite);
 
   flagPole = new GenericObject({
@@ -672,6 +690,41 @@ async function init() {
       y: canvas.height - lgPlatformImage.height - tree5Image.height,
       image: tree5Image,
     }),
+    new GenericObject({
+      x: 5000,
+      y: canvas.height - lgPlatformImage.height - tree6Image.height,
+      image: tree6Image,
+    }),
+    new GenericObject({
+      x: 5300,
+      y: canvas.height - lgPlatformImage.height - tree4Image.height,
+      image: tree4Image,
+    }),
+    new GenericObject({
+      x: 5600,
+      y: canvas.height - lgPlatformImage.height - tree7Image.height,
+      image: tree7Image,
+    }),
+    new GenericObject({
+      x: 6000,
+      y: canvas.height - lgPlatformImage.height - tree8Image.height,
+      image: tree8Image,
+    }),
+    new GenericObject({
+      x: 6600,
+      y: canvas.height - lgPlatformImage.height - tree4Image.height,
+      image: tree4Image,
+    }),
+    new GenericObject({
+      x: 7000,
+      y: canvas.height - lgPlatformImage.height - tree7Image.height,
+      image: tree7Image,
+    }),
+    new GenericObject({
+      x: 7400,
+      y: canvas.height - lgPlatformImage.height - tree6Image.height,
+      image: tree6Image,
+    }),
   ];
 
   kosnice = [
@@ -715,6 +768,21 @@ async function init() {
       y: canvas.height - lgPlatformImage.height - kos5Image.height,
       image: kos5Image,
     }),
+    new Kosnica({
+      x: 5300,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+    new Kosnica({
+      x: 5600,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+    new Kosnica({
+      x: 5500,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
   ];
 
   fireFlowers = [
@@ -741,6 +809,46 @@ async function init() {
     new FireFlower({
       position: {
         x: 2000,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 2400,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 2800,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 3400,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 3800,
         y: 100,
       },
       velocity: {
@@ -961,51 +1069,51 @@ async function init() {
     //   block: true,
     // }),
     new Platform({
-      x: 8712 + xtPlatformImage.width + 175,
+      x: 8712 + xtPlatformImage.width + 175 + 1700,
       y: canvas.height - xtPlatformImage.height,
       image: blockImage,
       block: true,
       text: 5712 + xtPlatformImage.width + 175,
     }),
     new Platform({
-      x: 5400 + 3 * lgPlatformImage.width - tPlatformImage.width,
+      x: 7200 + 3 * lgPlatformImage.width - tPlatformImage.width,
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height - 100,
       image: platformSmallImage,
       block: true,
     }),
     new Platform({
-      x: 6000 + 3 * lgPlatformImage.width - tPlatformImage.width,
+      x: 7800 + 3 * lgPlatformImage.width - tPlatformImage.width,
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height - 100,
       image: platformSmallImage,
       block: true,
     }),
 
     new Platform({
-      x: 9116 + 175,
+      x: 9116 + 175 + 1700,
       y: canvas.height - xtPlatformImage.height,
       image: blockImage,
       block: true,
     }),
     new Platform({
-      x: 9116 + 175 * 2,
+      x: 9116 + 175 * 2 + 1700,
       y: canvas.height - xtPlatformImage.height,
       image: blockImage,
       block: true,
     }),
     new Platform({
-      x: 9116 + 175 * 3,
+      x: 9116 + 175 * 3 + 1700,
       y: canvas.height - xtPlatformImage.height - 100,
       image: blockImage,
       block: true,
     }),
     new Platform({
-      x: 9116 + 175 * 4,
+      x: 9116 + 175 * 4 + 1700,
       y: canvas.height - xtPlatformImage.height - 200,
       image: blockTriImage,
       block: true,
     }),
     new Platform({
-      x: 9116 + 175 * 4 + blockTriImage.width,
+      x: 9116 + 175 * 4 + blockTriImage.width + 1700,
       y: canvas.height - xtPlatformImage.height - 200,
       image: blockTriImage,
       block: true,
@@ -1013,41 +1121,41 @@ async function init() {
     }),
 
     new Platform({
-      x: 9968 + 300,
+      x: 9968 + 300 + 1800,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
       text: 6968 + 300,
     }),
     new Platform({
-      x: 9968 + 300 + lgPlatformImage.width - 2,
+      x: 9968 + 300 + lgPlatformImage.width - 2 + 1800,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
       text: 6968 + 300,
     }),
     new Platform({
-      x: 10068 + 300 + 2 * lgPlatformImage.height - 2,
+      x: 10068 + 300 + 2 * lgPlatformImage.height - 2 + 1800,
       y: canvas.height - tPlatformImage.height,
       image: tPlatformImage,
       block: true,
       text: 6968 + 300,
     }),
     new Platform({
-      x: 10168 + 500 + 2 * lgPlatformImage.height - 2,
+      x: 10168 + 500 + 2 * lgPlatformImage.height - 2 + 1800,
       y: canvas.height - tPlatformImage.height - 100,
       image: tPlatformImage,
       block: true,
       text: 6968 + 300,
     }),
     new Platform({
-      x: 9968 + 300 + 2 * lgPlatformImage.width - 2,
+      x: 9968 + 300 + 2 * lgPlatformImage.width - 2 + 1800,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
     }),
     new Platform({
-      x: 9968 + 300 + 2 * lgPlatformImage.width - 2,
+      x: 9968 + 300 + 2 * lgPlatformImage.width - 2 + 1800,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
@@ -1078,6 +1186,8 @@ async function init() {
 
     "gap",
     "gap",
+    "lg",
+    "lg",
     "lg",
     "gap",
     "t",
