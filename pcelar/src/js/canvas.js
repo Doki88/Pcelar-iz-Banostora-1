@@ -21,6 +21,9 @@ import lgPlatform from "../img/lgPlatform.png";
 import tPlatform from "../img/tPlatform.png";
 import xtPlatform from "../img/xtPlatform.png";
 import flagPoleSprite from "../img/flagPole.png";
+import srkamenicaSprite from "../img/sremskakamenica.png";
+import tree1Sprite from "../img/tree1.png";
+import tree2Sprite from "../img/tree2.png";
 
 import spriteRunLeft from "../img/spriteRunLeft.png";
 import spriteRunRight from "../img/spriteRunRight.png";
@@ -46,6 +49,9 @@ import spriteFireFlowerJumpRight from "../img/spriteFireFlowerJumpRight.png";
 import spriteFireFlowerJumpLeft from "../img/spriteFireFlowerJumpLeft.png";
 
 import spriteFireFlower from "../img/spriteFireFlower.png";
+
+import spriteHodgehogLeft from "../img/spriteHodgehogLeft.png";
+import spriteHodgehogRight from "../img/spriteHodgehogRight.png";
 
 import spriteGoombaLeft from "../img/spriteGoombaLeft.png";
 import spriteGoombaRight from "../img/spriteGoombaRight.png";
@@ -222,7 +228,7 @@ class Platform {
 }
 
 class GenericObject {
-  constructor({ x, y, image }) {
+  constructor({ x, y, image, kuca, size }) {
     this.position = {
       x,
       y,
@@ -233,11 +239,14 @@ class GenericObject {
     };
 
     this.image = image;
+
     this.width = image.width;
     this.height = image.height;
+    this.kuca = kuca;
   }
 
   draw() {
+    if (this.kuca) console.log("crtam");
     c.drawImage(this.image, this.position.x, this.position.y);
   }
 
@@ -327,7 +336,77 @@ class Goomba {
     }
   }
 }
+class Hedgehog {
+  constructor({
+    position,
+    velocity,
+    distance = {
+      limit: 50,
+      traveled: 0,
+    },
+  }) {
+    this.position = {
+      x: position.x,
+      y: position.y,
+    };
 
+    this.velocity = {
+      x: velocity.x,
+      y: velocity.y,
+    };
+
+    this.width = 60;
+    this.height = 50;
+
+    this.sprites = {
+      stand: {
+        right: createImage(spriteHodgehogRight),
+        left: createImage(spriteHodgehogLeft),
+      },
+    };
+
+    this.currentSprite = this.sprites.stand.left;
+
+    this.distance = distance;
+  }
+
+  draw() {
+    c.drawImage(
+      this.currentSprite,
+      0,
+      0,
+      455,
+      340,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+  }
+
+  update() {
+    this.draw();
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+
+    if (this.position.y + this.height + this.velocity.y <= canvas.height)
+      this.velocity.y += gravity;
+
+    // walk the goomba back and forth
+    this.distance.traveled += Math.abs(this.velocity.x);
+
+    if (this.distance.traveled > this.distance.limit) {
+      this.distance.traveled = 0;
+      this.velocity.x = -this.velocity.x;
+
+      if (this.currentSprite === this.sprites.stand.left) {
+        this.currentSprite = this.sprites.stand.right;
+      } else {
+        this.currentSprite = this.sprites.stand.left;
+      }
+    }
+  }
+}
 class FireFlower {
   constructor({ position, velocity }) {
     this.position = {
@@ -442,7 +521,9 @@ let blockImage;
 let player = new Player();
 let platforms = [];
 let genericObjects = [];
+let trees = [];
 let goombas = [];
+let hedgehoges = [];
 let particles = [];
 let fireFlowers = [];
 
@@ -451,7 +532,14 @@ let keys;
 
 let scrollOffset;
 let flagPole;
+let flagPole1;
+
+let srkamenica;
+let tree1;
 let flagPoleImage;
+let srkamenicaImage;
+let tree1Image;
+let tree2Image;
 let game;
 let currentLevel = 1;
 
@@ -491,12 +579,48 @@ async function init() {
   tPlatformImage = await createImageAsync(tPlatform);
   xtPlatformImage = await createImageAsync(xtPlatform);
   flagPoleImage = await createImageAsync(flagPoleSprite);
+  srkamenicaImage = await createImageAsync(srkamenicaSprite);
+  tree1Image = await createImageAsync(tree1Sprite);
+  tree2Image = await createImageAsync(tree2Sprite);
 
   flagPole = new GenericObject({
-    x: 6968 + 600,
+    x: 10968 + 600,
     // x: 500,
     y: canvas.height - lgPlatformImage.height - flagPoleImage.height,
     image: flagPoleImage,
+  });
+
+  srkamenica = new GenericObject({
+    x: 6968 + 600,
+    //x: 500,
+    y: canvas.height - lgPlatformImage.height - srkamenicaImage.height,
+    image: srkamenicaImage,
+  });
+
+  trees = [
+    new GenericObject({
+      //x: 6968 + 600,
+      x: 500,
+      y: canvas.height - lgPlatformImage.height - tree1Image.height,
+      image: tree1Image,
+      size: { height: 50, width: 40 },
+    }),
+    new GenericObject({
+      //x: 6968 + 600,
+      x: 1200,
+      y: canvas.height - lgPlatformImage.height - tree2Image.height,
+      image: tree2Image,
+      kuca: true,
+      size: { height: 50, width: 40 },
+    }),
+  ];
+
+  tree1 = new GenericObject({
+    //x: 6968 + 600,
+    x: 500,
+    y: canvas.height - lgPlatformImage.height - tree1Image.height,
+    image: tree1Image,
+    kuca: true,
   });
 
   fireFlowers = [
@@ -539,6 +663,20 @@ async function init() {
     new Goomba({
       position: {
         x: 908 + lgPlatformImage.width - goombaWidth,
+        y: 100,
+      },
+      velocity: {
+        x: -0.3,
+        y: 0,
+      },
+      distance: {
+        limit: 400,
+        traveled: 0,
+      },
+    }),
+    new Goomba({
+      position: {
+        x: 1908 + lgPlatformImage.width - goombaWidth,
         y: 100,
       },
       velocity: {
@@ -646,6 +784,23 @@ async function init() {
       },
     }),
   ];
+
+  hedgehoges = [
+    new Hedgehog({
+      position: {
+        x: 700,
+        y: 100,
+      },
+      velocity: {
+        x: -0.3,
+        y: 0,
+      },
+      distance: {
+        limit: 100,
+        traveled: 0,
+      },
+    }),
+  ];
   particles = [];
   platforms = [
     new Platform({
@@ -662,6 +817,12 @@ async function init() {
     }),
     new Platform({
       x: 1991 + lgPlatformImage.width - tPlatformImage.width,
+      y: canvas.height - lgPlatformImage.height - tPlatformImage.height,
+      image: tPlatformImage,
+      block: false,
+    }),
+    new Platform({
+      x: 1991 + 2 * lgPlatformImage.width - tPlatformImage.width,
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height,
       image: tPlatformImage,
       block: false,
@@ -721,6 +882,20 @@ async function init() {
       block: true,
       text: 6968 + 300,
     }),
+    new Platform({
+      x: 6968 + 300 + lgPlatformImage.width - 2,
+      y: canvas.height - lgPlatformImage.height,
+      image: lgPlatformImage,
+      block: true,
+      text: 6968 + 300,
+    }),
+    new Platform({
+      x: 6968 + 300 + 2 * lgPlatformImage.height - 2,
+      y: canvas.height - lgPlatformImage.height,
+      image: lgPlatformImage,
+      block: true,
+      text: 6968 + 300,
+    }),
   ];
   genericObjects = [
     new GenericObject({
@@ -742,6 +917,8 @@ async function init() {
     "lg",
     "gap",
     "lg",
+    "lg",
+
     "gap",
     "gap",
     "lg",
@@ -1136,6 +1313,19 @@ function animate() {
     platform.update();
     platform.velocity.x = 0;
   });
+  if (srkamenica) {
+    srkamenica.update();
+    srkamenica.velocity.x = 0;
+  }
+  // if (tree1) {
+  //   tree1.update();
+  //   tree1.velocity.x = 0;
+  // }
+
+  trees.forEach((tree) => {
+    tree.update();
+    tree.velocity.x = 0;
+  });
 
   if (flagPole) {
     flagPole.update();
@@ -1241,6 +1431,9 @@ function animate() {
         fireFlowers.splice(i, 1);
       }, 0);
     } else fireFlower.update();
+  });
+  hedgehoges.forEach((hedgehoge, index) => {
+    hedgehoge.update();
   });
 
   goombas.forEach((goomba, index) => {
@@ -1371,6 +1564,10 @@ function animate() {
         scrollOffset += player.speed;
 
         flagPole.velocity.x = -player.speed;
+        srkamenica.velocity.x = -player.speed;
+        trees.forEach((tree) => {
+          tree.velocity.x = -player.speed;
+        });
 
         genericObjects.forEach((genericObject) => {
           genericObject.velocity.x = -player.speed * 0.66;
@@ -1378,6 +1575,9 @@ function animate() {
 
         goombas.forEach((goomba) => {
           goomba.position.x -= player.speed;
+        });
+        hedgehoges.forEach((hedgehoge) => {
+          hedgehoge.position.x -= player.speed;
         });
 
         fireFlowers.forEach((fireFlower) => {
@@ -1413,6 +1613,10 @@ function animate() {
         scrollOffset -= player.speed;
 
         flagPole.velocity.x = player.speed;
+        srkamenica.velocity.x = player.speed;
+        trees.forEach((tree) => {
+          tree.velocity.x = player.speed;
+        });
 
         genericObjects.forEach((genericObject) => {
           genericObject.velocity.x = player.speed * 0.66;
@@ -1420,6 +1624,9 @@ function animate() {
 
         goombas.forEach((goomba) => {
           goomba.position.x += player.speed;
+        });
+        hedgehoges.forEach((hedgehoge) => {
+          hedgehoge.position.x += player.speed;
         });
 
         fireFlowers.forEach((fireFlower) => {
@@ -1492,6 +1699,15 @@ function animate() {
         goomba.velocity.y = 0;
     });
 
+    hedgehoges.forEach((hedgehoge) => {
+      if (
+        isOnTopOfPlatform({
+          object: hedgehoge,
+          platform,
+        })
+      )
+        hedgehoge.velocity.y = 0;
+    });
     fireFlowers.forEach((fireFlower) => {
       if (
         isOnTopOfPlatform({
@@ -1589,25 +1805,21 @@ addEventListener("keydown", ({ keyCode }) => {
 
   switch (keyCode) {
     case 65:
-      console.log("left");
       keys.left.pressed = true;
       lastKey = "left";
 
       break;
 
     case 83:
-      console.log("down");
       break;
 
     case 68:
-      console.log("right");
       keys.right.pressed = true;
       lastKey = "right";
 
       break;
 
     case 87:
-      console.log("up");
       player.velocity.y -= 25;
 
       audio.fastSimpleChop.play();
@@ -1624,8 +1836,6 @@ addEventListener("keydown", ({ keyCode }) => {
       break;
 
     case 32:
-      console.log("space");
-
       //if (!player.powerUps.fireFlower) return;
 
       player.shooting = true;
@@ -1663,22 +1873,18 @@ addEventListener("keyup", ({ keyCode }) => {
 
   switch (keyCode) {
     case 65:
-      console.log("left");
       keys.left.pressed = false;
       break;
 
     case 83:
-      console.log("down");
       break;
 
     case 68:
-      console.log("right");
       keys.right.pressed = false;
 
       break;
 
     case 87:
-      console.log("up");
       break;
   }
 });
