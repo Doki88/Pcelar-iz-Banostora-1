@@ -16,6 +16,7 @@ import background from "../img/background.png";
 import platformSmallTall from "../img/platformSmallTall.png";
 import block from "../img/block.png";
 import blockTri from "../img/blockTri.png";
+import platformSmall from "../img/platformSmall.png";
 import mdPlatform from "../img/mdPlatform.png";
 import lgPlatform from "../img/lgPlatform.png";
 import tPlatform from "../img/tPlatform.png";
@@ -24,6 +25,11 @@ import flagPoleSprite from "../img/flagPole.png";
 import srkamenicaSprite from "../img/sremskakamenica.png";
 import tree1Sprite from "../img/tree1.png";
 import tree2Sprite from "../img/tree2.png";
+import tree3Sprite from "../img/tree3.png";
+import tree5Sprite from "../img/tree5.png";
+
+import kos2Sprite from "../img/kos2.png";
+import kos5Sprite from "../img/kos5.png";
 
 import spriteRunLeft from "../img/spriteRunLeft.png";
 import spriteRunRight from "../img/spriteRunRight.png";
@@ -255,7 +261,34 @@ class GenericObject {
     this.position.x += this.velocity.x;
   }
 }
+class Kosnica {
+  constructor({ x, y, image, kuca, size }) {
+    this.position = {
+      x,
+      y,
+    };
 
+    this.velocity = {
+      x: 0,
+    };
+
+    this.image = image;
+
+    this.width = image.width;
+    this.height = image.height;
+    this.kuca = kuca;
+  }
+
+  draw() {
+    if (this.kuca) console.log("crtam");
+    c.drawImage(this.image, this.position.x, this.position.y);
+  }
+
+  update() {
+    this.draw();
+    this.position.x += this.velocity.x;
+  }
+}
 class Goomba {
   constructor({
     position,
@@ -513,6 +546,7 @@ class Particle {
 let platformImage;
 let platformSmallTallImage;
 let blockTriImage;
+let platformSmallImage;
 let lgPlatformImage;
 let tPlatformImage;
 let xtPlatformImage;
@@ -524,6 +558,7 @@ let genericObjects = [];
 let trees = [];
 let goombas = [];
 let hedgehoges = [];
+let kosnice = [];
 let particles = [];
 let fireFlowers = [];
 
@@ -535,11 +570,15 @@ let flagPole;
 let flagPole1;
 
 let srkamenica;
-let tree1;
 let flagPoleImage;
 let srkamenicaImage;
 let tree1Image;
 let tree2Image;
+let tree3Image;
+let tree5Image;
+let kos2Image;
+let kos5Image;
+
 let game;
 let currentLevel = 1;
 
@@ -574,6 +613,7 @@ async function init() {
   platformImage = await createImageAsync(platform);
   platformSmallTallImage = await createImageAsync(platformSmallTall);
   blockTriImage = await createImageAsync(blockTri);
+  platformSmallImage = await createImageAsync(platformSmall);
   blockImage = await createImageAsync(block);
   lgPlatformImage = await createImageAsync(lgPlatform);
   tPlatformImage = await createImageAsync(tPlatform);
@@ -582,6 +622,10 @@ async function init() {
   srkamenicaImage = await createImageAsync(srkamenicaSprite);
   tree1Image = await createImageAsync(tree1Sprite);
   tree2Image = await createImageAsync(tree2Sprite);
+  tree3Image = await createImageAsync(tree3Sprite);
+  tree5Image = await createImageAsync(tree5Sprite);
+  kos2Image = await createImageAsync(kos2Sprite);
+  kos5Image = await createImageAsync(kos5Sprite);
 
   flagPole = new GenericObject({
     x: 10968 + 600,
@@ -599,29 +643,79 @@ async function init() {
 
   trees = [
     new GenericObject({
-      //x: 6968 + 600,
       x: 500,
       y: canvas.height - lgPlatformImage.height - tree1Image.height,
       image: tree1Image,
-      size: { height: 50, width: 40 },
     }),
     new GenericObject({
-      //x: 6968 + 600,
       x: 1200,
       y: canvas.height - lgPlatformImage.height - tree2Image.height,
       image: tree2Image,
-      kuca: true,
-      size: { height: 50, width: 40 },
+    }),
+    new GenericObject({
+      x: 2200,
+      y: canvas.height - lgPlatformImage.height - tree3Image.height,
+      image: tree3Image,
+    }),
+    new GenericObject({
+      x: 2800,
+      y: canvas.height - lgPlatformImage.height - tree5Image.height,
+      image: tree5Image,
+    }),
+    new GenericObject({
+      x: 3500,
+      y: canvas.height - lgPlatformImage.height - tree5Image.height,
+      image: tree5Image,
+    }),
+    new GenericObject({
+      x: 3800,
+      y: canvas.height - lgPlatformImage.height - tree5Image.height,
+      image: tree5Image,
     }),
   ];
 
-  tree1 = new GenericObject({
-    //x: 6968 + 600,
-    x: 500,
-    y: canvas.height - lgPlatformImage.height - tree1Image.height,
-    image: tree1Image,
-    kuca: true,
-  });
+  kosnice = [
+    new Kosnica({
+      x: 500,
+      y: canvas.height - lgPlatformImage.height - kos2Image.height,
+      image: kos2Image,
+    }),
+    new Kosnica({
+      x: 800,
+      y: canvas.height - lgPlatformImage.height - kos2Image.height,
+      image: kos2Image,
+    }),
+    new Kosnica({
+      x: 2200,
+      y: canvas.height - lgPlatformImage.height - kos5Image.height,
+      image: kos5Image,
+    }),
+    new Kosnica({
+      x: 3100,
+      y: canvas.height - lgPlatformImage.height - kos5Image.height,
+      image: kos5Image,
+    }),
+    new Kosnica({
+      x: 3200,
+      y: canvas.height - lgPlatformImage.height - kos5Image.height,
+      image: kos5Image,
+    }),
+    new Kosnica({
+      x: 3800,
+      y: canvas.height - lgPlatformImage.height - kos5Image.height,
+      image: kos5Image,
+    }),
+    new Kosnica({
+      x: 3900,
+      y: canvas.height - lgPlatformImage.height - kos5Image.height,
+      image: kos5Image,
+    }),
+    new Kosnica({
+      x: 4000,
+      y: canvas.height - lgPlatformImage.height - kos5Image.height,
+      image: kos5Image,
+    }),
+  ];
 
   fireFlowers = [
     new FireFlower({
@@ -676,7 +770,7 @@ async function init() {
     }),
     new Goomba({
       position: {
-        x: 1908 + lgPlatformImage.width - goombaWidth,
+        x: 2108 + lgPlatformImage.width - goombaWidth,
         y: 100,
       },
       velocity: {
@@ -822,13 +916,26 @@ async function init() {
       block: false,
     }),
     new Platform({
-      x: 1991 + 2 * lgPlatformImage.width - tPlatformImage.width,
+      x: 1991 + 3 * lgPlatformImage.width - tPlatformImage.width,
       y: canvas.height - lgPlatformImage.height - tPlatformImage.height,
       image: tPlatformImage,
       block: false,
     }),
     new Platform({
-      x: 1991 + lgPlatformImage.width - tPlatformImage.width - 100,
+      x: 5400 + 3 * lgPlatformImage.width - tPlatformImage.width,
+      y: canvas.height - lgPlatformImage.height - tPlatformImage.height - 100,
+      image: platformSmallImage,
+      block: true,
+    }),
+    new Platform({
+      x: 6000 + 3 * lgPlatformImage.width - tPlatformImage.width,
+      y: canvas.height - lgPlatformImage.height - tPlatformImage.height - 100,
+      image: platformSmallImage,
+      block: true,
+    }),
+
+    new Platform({
+      x: 3991 + lgPlatformImage.width - tPlatformImage.width - 100,
       y:
         canvas.height -
         lgPlatformImage.height -
@@ -838,59 +945,61 @@ async function init() {
       block: true,
     }),
     new Platform({
-      x: 5712 + xtPlatformImage.width + 175,
+      x: 8712 + xtPlatformImage.width + 175,
       y: canvas.height - xtPlatformImage.height,
       image: blockImage,
       block: true,
       text: 5712 + xtPlatformImage.width + 175,
     }),
+
     new Platform({
-      x: 6116 + 175,
+      x: 9116 + 175,
       y: canvas.height - xtPlatformImage.height,
       image: blockImage,
       block: true,
     }),
     new Platform({
-      x: 6116 + 175 * 2,
+      x: 9116 + 175 * 2,
       y: canvas.height - xtPlatformImage.height,
       image: blockImage,
       block: true,
     }),
     new Platform({
-      x: 6116 + 175 * 3,
+      x: 9116 + 175 * 3,
       y: canvas.height - xtPlatformImage.height - 100,
       image: blockImage,
       block: true,
     }),
     new Platform({
-      x: 6116 + 175 * 4,
+      x: 9116 + 175 * 4,
       y: canvas.height - xtPlatformImage.height - 200,
       image: blockTriImage,
       block: true,
     }),
     new Platform({
-      x: 6116 + 175 * 4 + blockTriImage.width,
+      x: 9116 + 175 * 4 + blockTriImage.width,
       y: canvas.height - xtPlatformImage.height - 200,
       image: blockTriImage,
       block: true,
       text: 6116 + 175 * 4 + blockTriImage.width,
     }),
+
     new Platform({
-      x: 6968 + 300,
+      x: 9968 + 300,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
       text: 6968 + 300,
     }),
     new Platform({
-      x: 6968 + 300 + lgPlatformImage.width - 2,
+      x: 9968 + 300 + lgPlatformImage.width - 2,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
       text: 6968 + 300,
     }),
     new Platform({
-      x: 6968 + 300 + 2 * lgPlatformImage.height - 2,
+      x: 9968 + 300 + 2 * lgPlatformImage.height - 2,
       y: canvas.height - lgPlatformImage.height,
       image: lgPlatformImage,
       block: true,
@@ -916,6 +1025,7 @@ async function init() {
     "lg",
     "lg",
     "gap",
+    "lg",
     "lg",
     "lg",
 
@@ -1313,20 +1423,19 @@ function animate() {
     platform.update();
     platform.velocity.x = 0;
   });
-  if (srkamenica) {
-    srkamenica.update();
-    srkamenica.velocity.x = 0;
-  }
-  // if (tree1) {
-  //   tree1.update();
-  //   tree1.velocity.x = 0;
+  // if (srkamenica) {
+  //   srkamenica.update();
+  //   srkamenica.velocity.x = 0;
   // }
 
   trees.forEach((tree) => {
     tree.update();
     tree.velocity.x = 0;
   });
-
+  kosnice.forEach((kosnica) => {
+    kosnica.update();
+    kosnica.velocity.x = 0;
+  });
   if (flagPole) {
     flagPole.update();
     flagPole.velocity.x = 0;
@@ -1568,6 +1677,9 @@ function animate() {
         trees.forEach((tree) => {
           tree.velocity.x = -player.speed;
         });
+        kosnice.forEach((kosnica) => {
+          kosnica.velocity.x = -player.speed;
+        });
 
         genericObjects.forEach((genericObject) => {
           genericObject.velocity.x = -player.speed * 0.66;
@@ -1617,7 +1729,9 @@ function animate() {
         trees.forEach((tree) => {
           tree.velocity.x = player.speed;
         });
-
+        kosnice.forEach((kosnica) => {
+          kosnica.velocity.x = player.speed;
+        });
         genericObjects.forEach((genericObject) => {
           genericObject.velocity.x = player.speed * 0.66;
         });
