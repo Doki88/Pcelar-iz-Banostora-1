@@ -16,6 +16,8 @@ import spriteFireFlowerJumpLeft from "../img/spriteFireFlowerJumpLeft.png";
 import { images } from "./images.js";
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
+
+import { gravity } from "./canvas.js";
 export class Player {
   constructor() {
     this.shooting = false;

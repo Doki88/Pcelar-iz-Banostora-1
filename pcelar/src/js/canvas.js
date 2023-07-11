@@ -10,7 +10,11 @@ import {
   objectsTouch,
 } from "./utils.js";
 
-//import { Player } from "./Player.js";
+import { Player } from "./Player.js";
+import { Platform } from "./Platform.js";
+import { GenericObject } from "./GenericObject.js";
+import { Kosnica } from "./Kosnica.js";
+import { Goomba } from "./Goomba.js";
 
 import platform from "../img/platform.png";
 import hills from "../img/hills.png";
@@ -79,310 +83,310 @@ import spriteGoombaRight from "../img/spriteGoombaRight.png";
 import { audio } from "./audio.js";
 import { images } from "./images.js";
 
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
+export const canvas = document.querySelector("canvas");
+export const c = canvas.getContext("2d");
 
 canvas.width = 1024;
 canvas.height = 676;
 
 let gravity = 1.5;
 
-class Player {
-  constructor() {
-    this.shooting = false;
-    this.speed = 10;
-    this.position = {
-      x: 100,
-      y: 100,
-    };
-    this.velocity = {
-      x: 0,
-      y: 0,
-    };
+// class Player {
+//   constructor() {
+//     this.shooting = false;
+//     this.speed = 10;
+//     this.position = {
+//       x: 100,
+//       y: 100,
+//     };
+//     this.velocity = {
+//       x: 0,
+//       y: 0,
+//     };
 
-    this.scale = 0.3;
-    this.width = 398 * this.scale;
-    this.height = 353 * this.scale;
+//     this.scale = 0.3;
+//     this.width = 398 * this.scale;
+//     this.height = 353 * this.scale;
 
-    this.image = createImage(spriteStandRight);
-    this.frames = 0;
-    this.sprites = {
-      stand: {
-        right: createImage(spriteMarioStandRight1),
-        left: createImage(spriteMarioStandLeft1),
-        fireFlower: {
-          right: createImage(spriteFireFlowerStandRight),
-          left: createImage(spriteFireFlowerStandLeft),
-        },
-      },
-      run: {
-        right: createImage(spriteMarioRunRight),
-        left: createImage(spriteMarioRunLeft),
-        fireFlower: {
-          right: createImage(spriteFireFlowerRunRight),
-          left: createImage(spriteFireFlowerRunLeft),
-        },
-      },
-      jump: {
-        right: createImage(spriteMarioJumpRight),
-        left: createImage(spriteMarioJumpLeft),
-        fireFlower: {
-          right: createImage(spriteFireFlowerJumpRight),
-          left: createImage(spriteFireFlowerJumpLeft),
-        },
-      },
-      shoot: {
-        fireFlower: {
-          right: createImage(images.mario.shoot.fireFlower.right),
-          left: createImage(images.mario.shoot.fireFlower.left),
-        },
-      },
-    };
+//     this.image = createImage(spriteStandRight);
+//     this.frames = 0;
+//     this.sprites = {
+//       stand: {
+//         right: createImage(spriteMarioStandRight1),
+//         left: createImage(spriteMarioStandLeft1),
+//         fireFlower: {
+//           right: createImage(spriteFireFlowerStandRight),
+//           left: createImage(spriteFireFlowerStandLeft),
+//         },
+//       },
+//       run: {
+//         right: createImage(spriteMarioRunRight),
+//         left: createImage(spriteMarioRunLeft),
+//         fireFlower: {
+//           right: createImage(spriteFireFlowerRunRight),
+//           left: createImage(spriteFireFlowerRunLeft),
+//         },
+//       },
+//       jump: {
+//         right: createImage(spriteMarioJumpRight),
+//         left: createImage(spriteMarioJumpLeft),
+//         fireFlower: {
+//           right: createImage(spriteFireFlowerJumpRight),
+//           left: createImage(spriteFireFlowerJumpLeft),
+//         },
+//       },
+//       shoot: {
+//         fireFlower: {
+//           right: createImage(images.mario.shoot.fireFlower.right),
+//           left: createImage(images.mario.shoot.fireFlower.left),
+//         },
+//       },
+//     };
 
-    this.currentSprite = this.sprites.stand.right;
-    this.currentCropWidth = 398;
-    this.powerUps = {
-      fireFlower: false,
-    };
-    this.invincible = false;
-    this.opacity = 1;
-  }
+//     this.currentSprite = this.sprites.stand.right;
+//     this.currentCropWidth = 398;
+//     this.powerUps = {
+//       fireFlower: false,
+//     };
+//     this.invincible = false;
+//     this.opacity = 1;
+//   }
 
-  draw() {
-    c.save();
-    // c.globalAlpha = this.opacity;
-    // c.fillStyle = "rgba(255, 0, 0, .2)";
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height);
-    c.drawImage(
-      this.currentSprite,
-      this.currentCropWidth * this.frames,
-      0,
-      this.currentCropWidth,
-      353,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
-    c.restore();
-  }
+//   draw() {
+//     c.save();
+//     // c.globalAlpha = this.opacity;
+//     // c.fillStyle = "rgba(255, 0, 0, .2)";
+//     // c.fillRect(this.position.x, this.position.y, this.width, this.height);
+//     c.drawImage(
+//       this.currentSprite,
+//       this.currentCropWidth * this.frames,
+//       0,
+//       this.currentCropWidth,
+//       353,
+//       this.position.x,
+//       this.position.y,
+//       this.width,
+//       this.height
+//     );
+//     c.restore();
+//   }
 
-  update() {
-    this.frames++;
-    const { currentSprite, sprites } = this;
+//   update() {
+//     this.frames++;
+//     const { currentSprite, sprites } = this;
 
-    if (
-      this.frames > 58 &&
-      (currentSprite === sprites.stand.fireFlower.left ||
-        currentSprite === sprites.stand.fireFlower.right)
-    )
-      this.frames = 0;
-    else if (currentSprite === sprites.stand.right) {
-      this.frames = 0;
-    } else if (currentSprite === sprites.stand.left) {
-      this.frames = 0;
-    } else if (
-      this.frames > 28 &&
-      (currentSprite === sprites.run.right ||
-        currentSprite === sprites.run.left ||
-        currentSprite === sprites.run.fireFlower.right ||
-        currentSprite === sprites.run.fireFlower.left)
-    )
-      this.frames = 0;
-    else if (
-      currentSprite === sprites.jump.right ||
-      currentSprite === sprites.jump.left ||
-      currentSprite === sprites.jump.fireFlower.right ||
-      currentSprite === sprites.jump.fireFlower.left ||
-      currentSprite === sprites.shoot.fireFlower.left ||
-      currentSprite === sprites.shoot.fireFlower.right
-    )
-      this.frames = 0;
+//     if (
+//       this.frames > 58 &&
+//       (currentSprite === sprites.stand.fireFlower.left ||
+//         currentSprite === sprites.stand.fireFlower.right)
+//     )
+//       this.frames = 0;
+//     else if (currentSprite === sprites.stand.right) {
+//       this.frames = 0;
+//     } else if (currentSprite === sprites.stand.left) {
+//       this.frames = 0;
+//     } else if (
+//       this.frames > 28 &&
+//       (currentSprite === sprites.run.right ||
+//         currentSprite === sprites.run.left ||
+//         currentSprite === sprites.run.fireFlower.right ||
+//         currentSprite === sprites.run.fireFlower.left)
+//     )
+//       this.frames = 0;
+//     else if (
+//       currentSprite === sprites.jump.right ||
+//       currentSprite === sprites.jump.left ||
+//       currentSprite === sprites.jump.fireFlower.right ||
+//       currentSprite === sprites.jump.fireFlower.left ||
+//       currentSprite === sprites.shoot.fireFlower.left ||
+//       currentSprite === sprites.shoot.fireFlower.right
+//     )
+//       this.frames = 0;
 
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.height + this.velocity.y <= canvas.height)
-      this.velocity.y += gravity;
+//     if (this.position.y + this.height + this.velocity.y <= canvas.height)
+//       this.velocity.y += gravity;
 
-    if (this.invincible) {
-      if (this.opacity === 1) this.opacity = 0;
-      else this.opacity = 1;
-    } else this.opacity = 1;
-  }
-}
+//     if (this.invincible) {
+//       if (this.opacity === 1) this.opacity = 0;
+//       else this.opacity = 1;
+//     } else this.opacity = 1;
+//   }
+// }
 
-class Platform {
-  constructor({ x, y, image, block, text }) {
-    this.position = {
-      x,
-      y,
-    };
+// class Platform {
+//   constructor({ x, y, image, block, text }) {
+//     this.position = {
+//       x,
+//       y,
+//     };
 
-    this.velocity = {
-      x: 0,
-    };
+//     this.velocity = {
+//       x: 0,
+//     };
 
-    this.image = image;
-    this.width = image.width;
-    this.height = image.height;
-    this.block = block;
-    this.text = text;
-  }
+//     this.image = image;
+//     this.width = image.width;
+//     this.height = image.height;
+//     this.block = block;
+//     this.text = text;
+//   }
 
-  draw() {
-    c.drawImage(this.image, this.position.x, this.position.y);
+//   draw() {
+//     c.drawImage(this.image, this.position.x, this.position.y);
 
-    if (this.text) {
-      c.font = "20px Arial";
-      c.fillStyle = "red";
-      c.fillText(this.text, this.position.x, this.position.y);
-    }
-  }
+//     if (this.text) {
+//       c.font = "20px Arial";
+//       c.fillStyle = "red";
+//       c.fillText(this.text, this.position.x, this.position.y);
+//     }
+//   }
 
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-  }
-}
+//   update() {
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//   }
+// }
 
-class GenericObject {
-  constructor({ x, y, image, kuca, size }) {
-    this.position = {
-      x,
-      y,
-    };
+// class GenericObject {
+//   constructor({ x, y, image, kuca, size }) {
+//     this.position = {
+//       x,
+//       y,
+//     };
 
-    this.velocity = {
-      x: 0,
-    };
+//     this.velocity = {
+//       x: 0,
+//     };
 
-    this.image = image;
+//     this.image = image;
 
-    this.width = image.width;
-    this.height = image.height;
-    this.kuca = kuca;
-  }
+//     this.width = image.width;
+//     this.height = image.height;
+//     this.kuca = kuca;
+//   }
 
-  draw() {
-    if (this.kuca) console.log("crtam");
-    c.drawImage(this.image, this.position.x, this.position.y);
-  }
+//   draw() {
+//     if (this.kuca) console.log("crtam");
+//     c.drawImage(this.image, this.position.x, this.position.y);
+//   }
 
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-  }
-}
-class Kosnica {
-  constructor({ x, y, image, kuca, size }) {
-    this.position = {
-      x,
-      y,
-    };
+//   update() {
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//   }
+// }
+// class Kosnica {
+//   constructor({ x, y, image, kuca, size }) {
+//     this.position = {
+//       x,
+//       y,
+//     };
 
-    this.velocity = {
-      x: 0,
-    };
+//     this.velocity = {
+//       x: 0,
+//     };
 
-    this.image = image;
+//     this.image = image;
 
-    this.width = image.width;
-    this.height = image.height;
-    this.kuca = kuca;
-  }
+//     this.width = image.width;
+//     this.height = image.height;
+//     this.kuca = kuca;
+//   }
 
-  draw() {
-    if (this.kuca) console.log("crtam");
-    c.drawImage(this.image, this.position.x, this.position.y);
-  }
+//   draw() {
+//     if (this.kuca) console.log("crtam");
+//     c.drawImage(this.image, this.position.x, this.position.y);
+//   }
 
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-  }
-}
-class Goomba {
-  constructor({
-    position,
-    velocity,
-    distance = {
-      limit: 50,
-      traveled: 0,
-    },
-  }) {
-    this.position = {
-      x: position.x,
-      y: position.y,
-    };
+//   update() {
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//   }
+// }
+// class Goomba {
+//   constructor({
+//     position,
+//     velocity,
+//     distance = {
+//       limit: 50,
+//       traveled: 0,
+//     },
+//   }) {
+//     this.position = {
+//       x: position.x,
+//       y: position.y,
+//     };
 
-    this.velocity = {
-      x: velocity.x,
-      y: velocity.y,
-    };
+//     this.velocity = {
+//       x: velocity.x,
+//       y: velocity.y,
+//     };
 
-    this.width = 80;
-    this.height = 150;
+//     this.width = 80;
+//     this.height = 150;
 
-    //this.image = createImage(spriteGoombaLeft);
+//     //this.image = createImage(spriteGoombaLeft);
 
-    this.sprites = {
-      stand: {
-        right: createImage(spriteGoombaRight),
-        left: createImage(spriteGoombaLeft),
-      },
-    };
+//     this.sprites = {
+//       stand: {
+//         right: createImage(spriteGoombaRight),
+//         left: createImage(spriteGoombaLeft),
+//       },
+//     };
 
-    this.currentSprite = this.sprites.stand.left;
+//     this.currentSprite = this.sprites.stand.left;
 
-    this.frames = 0;
+//     this.frames = 0;
 
-    this.distance = distance;
-  }
+//     this.distance = distance;
+//   }
 
-  draw() {
-    // c.fillStyle = 'red'
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+//   draw() {
+//     // c.fillStyle = 'red'
+//     // c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
-    c.drawImage(
-      this.currentSprite,
-      0,
-      0,
-      180,
-      385,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
-  }
+//     c.drawImage(
+//       this.currentSprite,
+//       0,
+//       0,
+//       180,
+//       385,
+//       this.position.x,
+//       this.position.y,
+//       this.width,
+//       this.height
+//     );
+//   }
 
-  update() {
-    // this.frames++;
-    // if (this.frames >= 58) this.frames = 0;
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
+//   update() {
+//     // this.frames++;
+//     // if (this.frames >= 58) this.frames = 0;
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.height + this.velocity.y <= canvas.height)
-      this.velocity.y += gravity;
+//     if (this.position.y + this.height + this.velocity.y <= canvas.height)
+//       this.velocity.y += gravity;
 
-    // walk the goomba back and forth
-    this.distance.traveled += Math.abs(this.velocity.x);
+//     // walk the goomba back and forth
+//     this.distance.traveled += Math.abs(this.velocity.x);
 
-    if (this.distance.traveled > this.distance.limit) {
-      this.distance.traveled = 0;
-      this.velocity.x = -this.velocity.x;
+//     if (this.distance.traveled > this.distance.limit) {
+//       this.distance.traveled = 0;
+//       this.velocity.x = -this.velocity.x;
 
-      if (this.currentSprite === this.sprites.stand.left) {
-        this.currentSprite = this.sprites.stand.right;
-      } else {
-        this.currentSprite = this.sprites.stand.left;
-      }
-    }
-  }
-}
+//       if (this.currentSprite === this.sprites.stand.left) {
+//         this.currentSprite = this.sprites.stand.right;
+//       } else {
+//         this.currentSprite = this.sprites.stand.left;
+//       }
+//     }
+//   }
+// }
 class Hedgehog {
   constructor({
     position,
@@ -1663,19 +1667,6 @@ function animate() {
     genericObject.velocity.x = 0;
   });
 
-  particles.forEach((particle, i) => {
-    particle.update();
-
-    if (
-      particle.fireball &&
-      (particle.position.x - particle.radius >= canvas.width ||
-        particle.position.x + particle.radius <= 0)
-    )
-      setTimeout(() => {
-        particles.splice(i, 1);
-      }, 0);
-  });
-
   platforms.forEach((platform) => {
     platform.update();
     platform.velocity.x = 0;
@@ -1693,6 +1684,19 @@ function animate() {
     kuca.update();
     kuca.velocity.x = 0;
   });
+  particles.forEach((particle, i) => {
+    particle.update();
+
+    if (
+      particle.fireball &&
+      (particle.position.x - particle.radius >= canvas.width ||
+        particle.position.x + particle.radius <= 0)
+    )
+      setTimeout(() => {
+        particles.splice(i, 1);
+      }, 0);
+  });
+
   if (flagPole) {
     //flagPole.update();
     flagPole.velocity.x = 0;
@@ -2264,3 +2268,4 @@ addEventListener("keyup", ({ keyCode }) => {
       break;
   }
 });
+export { gravity };
