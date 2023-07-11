@@ -2117,7 +2117,10 @@ function animate() {
   }
 
   // sprite jump
-  if (player.velocity.y !== 0) return;
+  if (player.velocity.y !== 0){
+    console.log('heree')
+    return;
+  } 
 
   if (
     keys.right.pressed &&
@@ -2180,10 +2183,10 @@ selectLevel(1);
 // initLevel2()
 animate();
 
-addEventListener("keydown", ({ keyCode }) => {
+addEventListener("keydown", (e) => {
   if (game.disableUserInput) return;
 
-  switch (keyCode) {
+  switch (e.keyCode) {
     case 65:
       keys.left.pressed = true;
       lastKey = "left";
@@ -2200,8 +2203,10 @@ addEventListener("keydown", ({ keyCode }) => {
       break;
 
     case 87:
-      player.velocity.y -= 25;
-
+      if(!e.repeat){
+        player.velocity.y -= 25;
+      
+      
       audio.fastSimpleChop.play();
 
       if (lastKey === "right") player.currentSprite = player.sprites.jump.right;
@@ -2214,6 +2219,11 @@ addEventListener("keydown", ({ keyCode }) => {
       else player.currentSprite = player.sprites.jump.fireFlower.left;
 
       break;
+      }
+      else{
+        break;
+      }
+      
 
     case 32:
       //if (!player.powerUps.fireFlower) return;
