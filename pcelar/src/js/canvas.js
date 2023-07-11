@@ -10,6 +10,8 @@ import {
   objectsTouch,
 } from "./utils.js";
 
+//import { Player } from "./Player.js";
+
 import platform from "../img/platform.png";
 import hills from "../img/hills.png";
 import background from "../img/background.png";
@@ -22,7 +24,6 @@ import lgPlatform from "../img/lgPlatform.png";
 import tPlatform from "../img/tPlatform.png";
 import xtPlatform from "../img/xtPlatform.png";
 import flagPoleSprite from "../img/flagPole.png";
-import srkamenicaSprite from "../img/sremskakamenica.png";
 import tree1Sprite from "../img/tree1.png";
 import tree2Sprite from "../img/tree2.png";
 import tree3Sprite from "../img/tree3.png";
@@ -34,8 +35,15 @@ import tree8Sprite from "../img/tree8.png";
 
 import kos2Sprite from "../img/kos2.png";
 import kos4Sprite from "../img/kos4.png";
-
 import kos5Sprite from "../img/kos5.png";
+
+import motocultSprite from "../img/motocult.png";
+
+import kuca1Sprite from "../img/kuca1.png";
+import kuca2Sprite from "../img/kuca2.png";
+import kuca3Sprite from "../img/kuca3.png";
+import djedoviSprite from "../img/djedovi.png";
+import lubeniceSprite from "../img/lubenice.png";
 
 import spriteRunLeft from "../img/spriteRunLeft.png";
 import spriteRunRight from "../img/spriteRunRight.png";
@@ -562,6 +570,7 @@ let player = new Player();
 let platforms = [];
 let genericObjects = [];
 let trees = [];
+let kuce = [];
 let goombas = [];
 let hedgehoges = [];
 let kosnice = [];
@@ -575,9 +584,7 @@ let scrollOffset;
 let flagPole;
 let flagPole1;
 
-let srkamenica;
 let flagPoleImage;
-let srkamenicaImage;
 let tree1Image;
 let tree2Image;
 let tree3Image;
@@ -590,6 +597,12 @@ let kos2Image;
 let kos4Image;
 
 let kos5Image;
+let motocultImage;
+let kuca1Image;
+let kuca2Image;
+let kuca3Image;
+let djedoviImage;
+let lubeniceImage;
 
 let game;
 let currentLevel = 1;
@@ -631,7 +644,6 @@ async function init() {
   tPlatformImage = await createImageAsync(tPlatform);
   xtPlatformImage = await createImageAsync(xtPlatform);
   flagPoleImage = await createImageAsync(flagPoleSprite);
-  srkamenicaImage = await createImageAsync(srkamenicaSprite);
   tree1Image = await createImageAsync(tree1Sprite);
   tree2Image = await createImageAsync(tree2Sprite);
   tree3Image = await createImageAsync(tree3Sprite);
@@ -644,19 +656,18 @@ async function init() {
   kos2Image = await createImageAsync(kos2Sprite);
   kos4Image = await createImageAsync(kos4Sprite);
   kos5Image = await createImageAsync(kos5Sprite);
+  motocultImage = await createImageAsync(motocultSprite);
+  kuca1Image = await createImageAsync(kuca1Sprite);
+  kuca2Image = await createImageAsync(kuca2Sprite);
+  kuca3Image = await createImageAsync(kuca3Sprite);
+  djedoviImage = await createImageAsync(djedoviSprite);
+  lubeniceImage = await createImageAsync(lubeniceSprite);
 
   flagPole = new GenericObject({
     x: 14968 + 600,
     // x: 500,
     y: canvas.height - lgPlatformImage.height - flagPoleImage.height,
     image: flagPoleImage,
-  });
-
-  srkamenica = new GenericObject({
-    x: 6968 + 600,
-    //x: 500,
-    y: canvas.height - lgPlatformImage.height - srkamenicaImage.height,
-    image: srkamenicaImage,
   });
 
   trees = [
@@ -725,6 +736,11 @@ async function init() {
       y: canvas.height - lgPlatformImage.height - tree6Image.height,
       image: tree6Image,
     }),
+    new GenericObject({
+      x: 6481,
+      y: canvas.height - lgPlatformImage.height - motocultImage.height,
+      image: motocultImage,
+    }),
   ];
 
   kosnice = [
@@ -782,6 +798,60 @@ async function init() {
       x: 5500,
       y: canvas.height - lgPlatformImage.height - kos4Image.height,
       image: kos4Image,
+    }),
+    new Kosnica({
+      x: 5900,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+    ,
+    new Kosnica({
+      x: 6100,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+    new Kosnica({
+      x: 7000,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+    new Kosnica({
+      x: 7100,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+    new Kosnica({
+      x: 7200,
+      y: canvas.height - lgPlatformImage.height - kos4Image.height,
+      image: kos4Image,
+    }),
+  ];
+
+  kuce = [
+    new GenericObject({
+      x: 13000,
+      y: canvas.height - lgPlatformImage.height - kuca1Image.height,
+      image: kuca1Image,
+    }),
+    new GenericObject({
+      x: 13000 + kuca1Image.width,
+      y: canvas.height - lgPlatformImage.height - kuca2Image.height,
+      image: kuca2Image,
+    }),
+    new GenericObject({
+      x: 13000 + kuca1Image.width + kuca2Image.width,
+      y: canvas.height - lgPlatformImage.height - kuca3Image.height,
+      image: kuca3Image,
+    }),
+    new GenericObject({
+      x: 13000 + kuca1Image.width - 200,
+      y: canvas.height - lgPlatformImage.height - djedoviImage.height,
+      image: djedoviImage,
+    }),
+    new GenericObject({
+      x: 13000 + kuca1Image.width + 100,
+      y: canvas.height - lgPlatformImage.height - lubeniceImage.height,
+      image: lubeniceImage,
     }),
   ];
 
@@ -849,6 +919,36 @@ async function init() {
     new FireFlower({
       position: {
         x: 3800,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 4200,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 5200,
+        y: 100,
+      },
+      velocity: {
+        x: 0,
+        y: 0,
+      },
+    }),
+    new FireFlower({
+      position: {
+        x: 5500,
         y: 100,
       },
       velocity: {
@@ -1580,10 +1680,6 @@ function animate() {
     platform.update();
     platform.velocity.x = 0;
   });
-  // if (srkamenica) {
-  //   srkamenica.update();
-  //   srkamenica.velocity.x = 0;
-  // }
 
   trees.forEach((tree) => {
     tree.update();
@@ -1593,8 +1689,12 @@ function animate() {
     kosnica.update();
     kosnica.velocity.x = 0;
   });
+  kuce.forEach((kuca) => {
+    kuca.update();
+    kuca.velocity.x = 0;
+  });
   if (flagPole) {
-    flagPole.update();
+    //flagPole.update();
     flagPole.velocity.x = 0;
 
     // mario touches flagpole
@@ -1830,14 +1930,16 @@ function animate() {
         scrollOffset += player.speed;
 
         flagPole.velocity.x = -player.speed;
-        srkamenica.velocity.x = -player.speed;
+
         trees.forEach((tree) => {
           tree.velocity.x = -player.speed;
         });
         kosnice.forEach((kosnica) => {
           kosnica.velocity.x = -player.speed;
         });
-
+        kuce.forEach((kuca) => {
+          kuca.velocity.x = -player.speed;
+        });
         genericObjects.forEach((genericObject) => {
           genericObject.velocity.x = -player.speed * 0.66;
         });
@@ -1882,12 +1984,15 @@ function animate() {
         scrollOffset -= player.speed;
 
         flagPole.velocity.x = player.speed;
-        srkamenica.velocity.x = player.speed;
+
         trees.forEach((tree) => {
           tree.velocity.x = player.speed;
         });
         kosnice.forEach((kosnica) => {
           kosnica.velocity.x = player.speed;
+        });
+        kuce.forEach((kuca) => {
+          kuca.velocity.x = player.speed;
         });
         genericObjects.forEach((genericObject) => {
           genericObject.velocity.x = player.speed * 0.66;
