@@ -2117,10 +2117,7 @@ function animate() {
   }
 
   // sprite jump
-  if (player.velocity.y !== 0){
-    console.log('heree')
-    return;
-  } 
+  if (player.velocity.y !== 0) return;
 
   if (
     keys.right.pressed &&
@@ -2203,27 +2200,25 @@ addEventListener("keydown", (e) => {
       break;
 
     case 87:
-      if(!e.repeat){
+      if (!e.repeat) {
         player.velocity.y -= 25;
-      
-      
-      audio.fastSimpleChop.play();
 
-      if (lastKey === "right") player.currentSprite = player.sprites.jump.right;
-      else player.currentSprite = player.sprites.jump.left;
+        audio.fastSimpleChop.play();
 
-      if (!player.powerUps.fireFlower) break;
+        if (lastKey === "right")
+          player.currentSprite = player.sprites.jump.right;
+        else player.currentSprite = player.sprites.jump.left;
 
-      if (lastKey === "right")
-        player.currentSprite = player.sprites.jump.fireFlower.right;
-      else player.currentSprite = player.sprites.jump.fireFlower.left;
+        if (!player.powerUps.fireFlower) break;
 
-      break;
-      }
-      else{
+        if (lastKey === "right")
+          player.currentSprite = player.sprites.jump.fireFlower.right;
+        else player.currentSprite = player.sprites.jump.fireFlower.left;
+
+        break;
+      } else {
         break;
       }
-      
 
     case 32:
       //if (!player.powerUps.fireFlower) return;
