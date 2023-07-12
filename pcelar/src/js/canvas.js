@@ -2151,10 +2151,10 @@ selectLevel(1);
 // init()
 // initLevel2()
 animate();
-
+let counter = 0;
 addEventListener("keydown", (e) => {
   if (game.disableUserInput) return;
-
+  
   switch (e.keyCode) {
     case 65:
       keys.left.pressed = true;
@@ -2172,9 +2172,15 @@ addEventListener("keydown", (e) => {
       break;
 
     case 87:
+      counter++;
       if (!e.repeat) {
-        player.velocity.y -= 25;
-
+        
+        if (counter <= 2) {
+          player.velocity.y -= 22;
+        }else{
+          counter = 0
+        }
+        
         audio.fastSimpleChop.play();
 
         if (lastKey === "right")
@@ -2183,15 +2189,16 @@ addEventListener("keydown", (e) => {
 
         if (!player.powerUps.fireFlower) break;
 
-        if (lastKey === "right")
-          player.currentSprite = player.sprites.jump.fireFlower.right;
+        if (lastKey === "right")player.currentSprite = player.sprites.jump.fireFlower.right;
+          
         else player.currentSprite = player.sprites.jump.fireFlower.left;
-
+        
         break;
       } else {
+        counter = 0
         break;
       }
-
+      
     case 32:
       //if (!player.powerUps.fireFlower) return;
 
