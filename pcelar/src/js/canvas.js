@@ -15,6 +15,9 @@ import { Platform } from "./Platform.js";
 import { GenericObject } from "./GenericObject.js";
 import { Kosnica } from "./Kosnica.js";
 import { Goomba } from "./Goomba.js";
+import { Hedgehog } from "./Hedgehog.js";
+import { FireFlower } from "./FireFlower.js";
+import { Particle } from "./Particle.js";
 
 import platform from "../img/platform.png";
 import hills from "../img/hills.png";
@@ -48,37 +51,6 @@ import kuca2Sprite from "../img/kuca2.png";
 import kuca3Sprite from "../img/kuca3.png";
 import djedoviSprite from "../img/djedovi.png";
 import lubeniceSprite from "../img/lubenice.png";
-
-import spriteRunLeft from "../img/spriteRunLeft.png";
-import spriteRunRight from "../img/spriteRunRight.png";
-import spriteStandLeft from "../img/spriteStandLeft.png";
-import spriteStandRight from "../img/spriteStandRight.png";
-
-import spriteMarioRunLeft from "../img/spriteMarioRunLeft.png";
-import spriteMarioRunRight from "../img/spriteMarioRunRight.png";
-import spriteMarioStandLeft from "../img/spriteMarioStandLeft.png";
-import spriteMarioStandLeft1 from "../img/spriteMarioStandLeft1.png";
-
-import spriteMarioStandRight from "../img/spriteMarioStandRight.png";
-import spriteMarioStandRight1 from "../img/spriteMarioStandRight1.png";
-
-import spriteMarioJumpRight from "../img/spriteMarioJumpRight.png";
-import spriteMarioJumpLeft from "../img/spriteMarioJumpLeft.png";
-
-import spriteFireFlowerRunRight from "../img/spriteFireFlowerRunRight.png";
-import spriteFireFlowerRunLeft from "../img/spriteFireFlowerRunLeft.png";
-import spriteFireFlowerStandRight from "../img/spriteFireFlowerStandRight.png";
-import spriteFireFlowerStandLeft from "../img/spriteFireFlowerStandLeft.png";
-import spriteFireFlowerJumpRight from "../img/spriteFireFlowerJumpRight.png";
-import spriteFireFlowerJumpLeft from "../img/spriteFireFlowerJumpLeft.png";
-
-import spriteFireFlower from "../img/spriteFireFlower.png";
-
-import spriteHodgehogLeft from "../img/spriteHodgehogLeft.png";
-import spriteHodgehogRight from "../img/spriteHodgehogRight.png";
-
-import spriteGoombaLeft from "../img/spriteGoombaLeft.png";
-import spriteGoombaRight from "../img/spriteGoombaRight.png";
 
 import { audio } from "./audio.js";
 import { images } from "./images.js";
@@ -387,179 +359,179 @@ let gravity = 1.5;
 //     }
 //   }
 // }
-class Hedgehog {
-  constructor({
-    position,
-    velocity,
-    distance = {
-      limit: 50,
-      traveled: 0,
-    },
-  }) {
-    this.position = {
-      x: position.x,
-      y: position.y,
-    };
+// class Hedgehog {
+//   constructor({
+//     position,
+//     velocity,
+//     distance = {
+//       limit: 50,
+//       traveled: 0,
+//     },
+//   }) {
+//     this.position = {
+//       x: position.x,
+//       y: position.y,
+//     };
 
-    this.velocity = {
-      x: velocity.x,
-      y: velocity.y,
-    };
+//     this.velocity = {
+//       x: velocity.x,
+//       y: velocity.y,
+//     };
 
-    this.width = 60;
-    this.height = 50;
+//     this.width = 60;
+//     this.height = 50;
 
-    this.sprites = {
-      stand: {
-        right: createImage(spriteHodgehogRight),
-        left: createImage(spriteHodgehogLeft),
-      },
-    };
+//     this.sprites = {
+//       stand: {
+//         right: createImage(spriteHodgehogRight),
+//         left: createImage(spriteHodgehogLeft),
+//       },
+//     };
 
-    this.currentSprite = this.sprites.stand.left;
+//     this.currentSprite = this.sprites.stand.left;
 
-    this.distance = distance;
-  }
+//     this.distance = distance;
+//   }
 
-  draw() {
-    c.drawImage(
-      this.currentSprite,
-      0,
-      0,
-      455,
-      340,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
-  }
+//   draw() {
+//     c.drawImage(
+//       this.currentSprite,
+//       0,
+//       0,
+//       455,
+//       340,
+//       this.position.x,
+//       this.position.y,
+//       this.width,
+//       this.height
+//     );
+//   }
 
-  update() {
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
+//   update() {
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.height + this.velocity.y <= canvas.height)
-      this.velocity.y += gravity;
+//     if (this.position.y + this.height + this.velocity.y <= canvas.height)
+//       this.velocity.y += gravity;
 
-    // walk the goomba back and forth
-    this.distance.traveled += Math.abs(this.velocity.x);
+//     // walk the goomba back and forth
+//     this.distance.traveled += Math.abs(this.velocity.x);
 
-    if (this.distance.traveled > this.distance.limit) {
-      this.distance.traveled = 0;
-      this.velocity.x = -this.velocity.x;
+//     if (this.distance.traveled > this.distance.limit) {
+//       this.distance.traveled = 0;
+//       this.velocity.x = -this.velocity.x;
 
-      if (this.currentSprite === this.sprites.stand.left) {
-        this.currentSprite = this.sprites.stand.right;
-      } else {
-        this.currentSprite = this.sprites.stand.left;
-      }
-    }
-  }
-}
-class FireFlower {
-  constructor({ position, velocity }) {
-    this.position = {
-      x: position.x,
-      y: position.y,
-    };
+//       if (this.currentSprite === this.sprites.stand.left) {
+//         this.currentSprite = this.sprites.stand.right;
+//       } else {
+//         this.currentSprite = this.sprites.stand.left;
+//       }
+//     }
+//   }
+// }
+// class FireFlower {
+//   constructor({ position, velocity }) {
+//     this.position = {
+//       x: position.x,
+//       y: position.y,
+//     };
 
-    this.velocity = {
-      x: velocity.x,
-      y: velocity.y,
-    };
+//     this.velocity = {
+//       x: velocity.x,
+//       y: velocity.y,
+//     };
 
-    this.width = 36;
-    this.height = 40;
+//     this.width = 36;
+//     this.height = 40;
 
-    this.image = createImage(spriteFireFlower);
-    this.frames = 0;
-  }
+//     this.image = createImage(spriteFireFlower);
+//     this.frames = 0;
+//   }
 
-  draw() {
-    // c.fillStyle = 'red'
-    // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+//   draw() {
+//     // c.fillStyle = 'red'
+//     // c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
-    c.drawImage(
-      this.image,
-      0, //* this.frames,
-      0,
-      356,
-      360,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
-  }
+//     c.drawImage(
+//       this.image,
+//       0, //* this.frames,
+//       0,
+//       356,
+//       360,
+//       this.position.x,
+//       this.position.y,
+//       this.width,
+//       this.height
+//     );
+//   }
 
-  update() {
-    // this.frames++;
-    // if (this.frames >= 75) this.frames = 0;
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
+//   update() {
+//     // this.frames++;
+//     // if (this.frames >= 75) this.frames = 0;
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.height + this.velocity.y <= canvas.height)
-      this.velocity.y += gravity;
-  }
-}
+//     if (this.position.y + this.height + this.velocity.y <= canvas.height)
+//       this.velocity.y += gravity;
+//   }
+// }
 
-class Particle {
-  constructor({
-    position,
-    velocity,
-    radius,
-    color = "#654428",
-    fireball = false,
-    fades = false,
-  }) {
-    this.position = {
-      x: position.x,
-      y: position.y,
-    };
+// class Particle {
+//   constructor({
+//     position,
+//     velocity,
+//     radius,
+//     color = "#654428",
+//     fireball = false,
+//     fades = false,
+//   }) {
+//     this.position = {
+//       x: position.x,
+//       y: position.y,
+//     };
 
-    this.velocity = {
-      x: velocity.x,
-      y: velocity.y,
-    };
+//     this.velocity = {
+//       x: velocity.x,
+//       y: velocity.y,
+//     };
 
-    this.radius = radius;
-    this.ttl = 300;
-    this.color = color;
-    this.fireball = fireball;
-    this.opacity = 1;
-    this.fades = fades;
-  }
+//     this.radius = radius;
+//     this.ttl = 300;
+//     this.color = color;
+//     this.fireball = fireball;
+//     this.opacity = 1;
+//     this.fades = fades;
+//   }
 
-  draw() {
-    c.save();
-    c.globalAlpha = this.opacity;
-    c.beginPath();
-    c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-    c.closePath();
-    c.restore();
-  }
+//   draw() {
+//     c.save();
+//     c.globalAlpha = this.opacity;
+//     c.beginPath();
+//     c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, false);
+//     c.fillStyle = this.color;
+//     c.fill();
+//     c.closePath();
+//     c.restore();
+//   }
 
-  update() {
-    this.ttl--;
-    this.draw();
-    this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y;
+//   update() {
+//     this.ttl--;
+//     this.draw();
+//     this.position.x += this.velocity.x;
+//     this.position.y += this.velocity.y;
 
-    if (this.position.y + this.radius + this.velocity.y <= canvas.height)
-      this.velocity.y += gravity * 0.4;
+//     if (this.position.y + this.radius + this.velocity.y <= canvas.height)
+//       this.velocity.y += gravity * 0.4;
 
-    if (this.fades && this.opacity > 0) {
-      this.opacity -= 0.01;
-    }
+//     if (this.fades && this.opacity > 0) {
+//       this.opacity -= 0.01;
+//     }
 
-    if (this.opacity < 0) this.opacity = 0;
-  }
-}
+//     if (this.opacity < 0) this.opacity = 0;
+//   }
+// }
 
 let platformImage;
 let platformSmallTallImage;
